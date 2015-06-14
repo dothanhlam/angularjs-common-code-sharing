@@ -18,10 +18,13 @@ You need git to clone the angular-seed repository. You can get git from
 We also use a number of node.js tools to initialize and test angular-seed. You must have node.js and
 its package manager (npm) installed.  You can get them from [http://nodejs.org/](http://nodejs.org/).
 
-You needs to install phonegap as well,
+You needs to install phonegap, and grunt-cli as well
 ```
     npm install phonegap -g
+    npm install -g grunt-cli
 ```
+
+
 ### Clone angularjs-common-code-sharing
 
 Clone the angularjs-common-code-sharing repository using [git][git]:
@@ -76,4 +79,82 @@ karma.conf.js         --> config file for running unit tests with Karma
 e2e-tests/            --> end-to-end tests
   protractor-conf.js    --> Protractor config file
   scenarios.js          --> end-to-end scenarios to be run by Protractor
+```
+### How to integrate with phonegap
+
+After cloning from cd angularjs-common-code-sharing repository, go to its folder
+```
+cd angularjs-common-code-sharing
+```
+Create phonegap package
+```
+phonegap create phonegap
+```
+If you want to use your own name, remember to change the phonegap folder in gruntfile. I will
+update the new tasks that automatically create phonegap and mapping the name soon.
+
+Next, you need to update dependencies by executing npm install. When the depend
+
+```
+npm install
+```
+
+Executing 'grunt phonegap' - the task that specified for mifiying, copying needed codes into www phonegap.
+It also creates app folder and all your AngularJS code will be stored here.
+```
+grunt phonegap
+```
+
+In phonegap package, opening config.xml and changing this setting
+```
+    <content src="index.html" />
+```
+
+to
+```
+    <content src="app/index.html" />
+```
+
+You also need to modify the index.html, so it can load the minification resource as well. Or just copying
+the code below
+
+```
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>My AngularJS App</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/normalize.min.css">
+  <link rel="stylesheet" href="css/main.min.css">
+  <link rel="stylesheet" href="css/app.min.css">
+</head>
+<body>
+  <ul class="menu">
+    <li><a href="#/view1">view1</a></li>
+    <li><a href="#/view2">view2</a></li>
+  </ul>
+
+  <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+
+  <div ng-view></div>
+
+  <div>Angular seed app: v<span app-version></span></div>
+
+  <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+  -->
+  <script src="libs/angular.min.js"></script>
+  <script src="libs/angular-route.min.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
+
 ```
