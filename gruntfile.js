@@ -6,16 +6,29 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
-        clean: ['dist', 'tmp'],
+        clean: ['build', 'tmp'],
 
         concat: {
-            generated: {
+            web: {
                 files: [
                     {
                         dest: 'tmp/app.js',
                         src: [  'app/common/**/*.js',
                                 'app/components/**/*.js',
-                                'app/profiles/web/*.js'
+                                'app/profiles/web/**/*.js'
+                        ]
+                    }
+                ]
+            },
+            phone:{
+                files: [
+                    {
+                        dest: 'phonegap/www/app/main.js',
+                        src: [
+                                'app/common/**/*.js',
+                                'app/components/**/*.js',
+                                'app/profiles/phone/**/*.js',
+                                '!app/**/*_test.js'
                         ]
                     }
                 ]
@@ -23,7 +36,7 @@ module.exports = function (grunt) {
         },
 
         uglify: {
-            build: {
+            web: {
                 files: [{
                     flatten: true,
                     expand: true,
@@ -31,6 +44,54 @@ module.exports = function (grunt) {
                     dest: 'build',
                     ext: '.min.js'
                 }]
+            },
+            phone: {
+                files: [{
+                    flatten: true,
+                    expand: true,
+                    src: ['tmp/**/*.js','!app.js'],
+                    dest: 'phonegap/www/app/libs',
+                    ext: '.min.js'
+                }]
+            }
+        },
+
+        cssmin: {
+            target: {
+                files: [{
+                    expand: true,
+                    flatten: true,
+
+                    cwd: 'app/',
+                    src: ['*.css', '!*.min.css'],
+                    dest: 'release/css',
+                    ext: '.min.css'
+                }]
+            },
+            phone: {
+                files: [{
+                    expand: true,
+                    flatten: true,
+                    cwd: 'app/',
+                    src: ['**/*.css', '!*.min.css'],
+                    dest: 'phonegap/www/app/css',
+                    ext: '.min.css'
+                }]
+            }
+
+        },
+
+        copy: {
+            phonegap: {
+                files:[
+                    {
+                        expand: true,
+                        flatten: true,
+                        cwd: 'app/profiles/phone',
+                        src: ['**/*.html','!index.html'],
+                        dest: 'phonegap/www/app'
+                    }
+                ]
             }
         }
 
@@ -43,7 +104,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-rev');
     grunt.loadNpmTasks('grunt-usemin');
-    grunt.loadNpmTasks('grunt-ng-annotate');
 
 
     grunt.registerTask("prepareModules", "Finds and prepares modules for concatenation.", function(src, dest) {
@@ -71,6 +131,7 @@ module.exports = function (grunt) {
     });
 
     // Tell Grunt what to do when we type "grunt" into the terminal
-    grunt.registerTask('default', ['clean','prepareModules:app/bower_components/*:tmp/', 'concat', 'uglify']);
+    grunt.registerTask('default', ['clean','prepareModules:app/bower_components/*:tmp/', 'concat:web', 'uglify:web']);
+    grunt.registerTask('phonegap', ['clean','prepareModules:app/bower_components/*:tmp/','concat:phone', 'copy:phonegap','uglify:phone', 'cssmin:phone']);
 
 };
