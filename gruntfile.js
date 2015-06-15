@@ -12,7 +12,7 @@ module.exports = function (grunt) {
             web: {
                 files: [
                     {
-                        dest: 'tmp/app.js',
+                        dest: 'build/app.js',
                         src: [  'app/common/**/*.js',
                                 'app/components/**/*.js',
                                 'app/profiles/web/**/*.js'
@@ -40,7 +40,7 @@ module.exports = function (grunt) {
                 files: [{
                     flatten: true,
                     expand: true,
-                    src: 'tmp/**/*.js',
+                    src: ['tmp/**/*.js','!app.js'],
                     dest: 'build',
                     ext: '.min.js'
                 }]
@@ -57,14 +57,13 @@ module.exports = function (grunt) {
         },
 
         cssmin: {
-            target: {
+            web: {
                 files: [{
                     expand: true,
                     flatten: true,
-
                     cwd: 'app/',
                     src: ['*.css', '!*.min.css'],
-                    dest: 'release/css',
+                    dest: 'build/css',
                     ext: '.min.css'
                 }]
             },
@@ -78,15 +77,27 @@ module.exports = function (grunt) {
                     ext: '.min.css'
                 }]
             }
-
         },
 
+
         copy: {
+            web: {
+                files:[
+                    {
+                        expand: true,
+                        flatten: false,
+                        cwd: 'app/profiles/web',
+                        src: ['**/*.html'],
+                        dest: 'build'
+                    }
+                ]
+            },
+
             phonegap: {
                 files:[
                     {
                         expand: true,
-                        flatten: true,
+                        flatten: false,
                         cwd: 'app/profiles/phone',
                         src: ['**/*.html','!index.html'],
                         dest: 'phonegap/www/app'
@@ -131,7 +142,19 @@ module.exports = function (grunt) {
     });
 
     // Tell Grunt what to do when we type "grunt" into the terminal
-    grunt.registerTask('default', ['clean','prepareModules:app/bower_components/*:tmp/', 'concat:web', 'uglify:web']);
-    grunt.registerTask('phonegap', ['clean','prepareModules:app/bower_components/*:tmp/','concat:phone', 'copy:phonegap','uglify:phone', 'cssmin:phone']);
+    grunt.registerTask('default', [
+        'clean',
+        'prepareModules:app/bower_components/*:tmp/',
+        'concat:web',
+        'copy:web',
+        'uglify:web',
+        'cssmin:web']);
+    grunt.registerTask('phonegap', [
+        'clean',
+        'prepareModules:app/bower_components/*:tmp/',
+        'concat:phone',
+        'copy:phonegap',
+        'uglify:phone',
+        'cssmin:phone']);
 
 };
