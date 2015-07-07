@@ -1,1 +1,7 @@
 <p>This is the partial for view 1 - ios.</p>
+<button ng-click="callNotify('You have tapped me 3 times');">TAP ME 3 TIMES</button>
+<div ng-controller="InheritedBasedController">
+    <h2>Message: {{sharedMessage}}</h2>
+    <button ng-click="callNotify(sharedMessage);">TAP ME 3 TIMES</button>
+
+</div>
