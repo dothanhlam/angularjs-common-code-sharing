@@ -47,11 +47,13 @@ module.exports = function (grunt) {
 
         jshint: {
             files: ['gruntfile.js',
-                'app/common/**/*.js',
+                'app/**/*.js',
                 'app/components/**/*.js',
                 'app/profiles/**/*.js'],
             options: {
                 globals: {
+                    jQuery:true,
+                    jasmine: true
                 }
             }
         },
@@ -135,7 +137,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-rev');
     grunt.loadNpmTasks('grunt-usemin');
+    //testing runners
     grunt.loadNpmTasks('grunt-karma');
+   // grunt.loadNpmTasks('grunt-protractor-runner');
 
     grunt.registerTask("prepareModules", "Finds and prepares modules for concatenation.", function(src, dest) {
 

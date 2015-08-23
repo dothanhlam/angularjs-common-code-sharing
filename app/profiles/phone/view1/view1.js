@@ -10,7 +10,7 @@ angular.module('myApp.view1', ['ngRoute',
   });
 }])
 
-.controller('View1Ctrl', ["$scope", "notify", function(scope, notify) {
+.controller('View1Ctrl', ["$scope", "Notify", function(scope, notify) {
         scope.callNotify = function(msg) {
             notify(msg);
         };
