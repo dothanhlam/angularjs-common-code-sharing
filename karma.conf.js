@@ -21,8 +21,6 @@ module.exports = function (config) {
             'app/common/**/!(*_test).js': ['coverage'],
             'app/components/**/!(*_test).js': ['coverage'],
             'app/profiles/web/**/!(*_test).js': ['coverage']
-
-
         },
 
         autoWatch: false,
