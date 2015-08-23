@@ -1,10 +1,11 @@
 logs/*
 !.gitkeep
 node_modules/
-bower_components/
+bower_components
 tmp
 build
-tmp
+test_out
+coverage
 phonegap
 .DS_Store
 .idea

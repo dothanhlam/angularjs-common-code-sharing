@@ -8,6 +8,16 @@ module.exports = function (grunt) {
 
         clean: ['build', 'tmp'],
 
+        //testing
+        karma: {
+            options: {
+                configFile: 'karma.conf.js'
+            },
+            unit: {
+                singleRun: true
+            }
+        },
+
         concat: {
             web: {
                 files: [
@@ -35,6 +45,16 @@ module.exports = function (grunt) {
             }
         },
 
+        jshint: {
+            files: ['gruntfile.js',
+                'app/common/**/*.js',
+                'app/components/**/*.js',
+                'app/profiles/**/*.js'],
+            options: {
+                globals: {
+                }
+            }
+        },
         uglify: {
             web: {
                 files: [{
@@ -105,17 +125,17 @@ module.exports = function (grunt) {
                 ]
             }
         }
-
     });
 
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-rev');
     grunt.loadNpmTasks('grunt-usemin');
-
+    grunt.loadNpmTasks('grunt-karma');
 
     grunt.registerTask("prepareModules", "Finds and prepares modules for concatenation.", function(src, dest) {
 
@@ -157,4 +177,7 @@ module.exports = function (grunt) {
         'uglify:phone',
         'cssmin:phone']);
 
+    grunt.registerTask('test', [
+        'karma'
+    ]);
 };
